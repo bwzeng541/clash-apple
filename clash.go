@@ -55,7 +55,7 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	return nil
 }
 
-func ApplyConfig(uuid string) error {
+func SetConfig(uuid string) error {
 	if stack == nil {
 		return nil
 	}
@@ -77,6 +77,13 @@ func SetTunnelMode(mode string) {
 	}
 	CloseAllConnections()
 	T.SetMode(T.ModeMapping[mode])
+}
+
+func SetLogLevel(level string) {
+	if stack == nil {
+		return
+	}
+	log.SetLevel(log.LogLevelMapping[level])
 }
 
 func CloseAllConnections() {
