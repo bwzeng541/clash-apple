@@ -6,7 +6,7 @@ import (
 
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
-	"github.com/Dreamacro/clash/log"
+	L "github.com/Dreamacro/clash/log"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
 	"github.com/eycorsican/go-tun2socks/core"
@@ -79,13 +79,6 @@ func SetTunnelMode(mode string) {
 	T.SetMode(T.ModeMapping[mode])
 }
 
-func SetLogLevel(level string) {
-	if stack == nil {
-		return
-	}
-	log.SetLevel(log.LogLevelMapping[level])
-}
-
 func CloseAllConnections() {
 	snapshot := statistic.DefaultManager.Snapshot()
 	for _, c := range snapshot.Connections {
@@ -110,18 +103,28 @@ func fetchTraffic() {
 	}
 }
 
+func SetLogLevel(level string) {
+	if stack == nil {
+		return
+	}
+	L.SetLevel(L.LogLevelMapping[level])
+}
+
 func SetRealTimeLogger(l RealTimeLogger) {
 	logger = l
 }
 
 func fetchLogs() {
-	sub := log.Subscribe()
-	defer log.UnSubscribe(sub)
+	sub := L.Subscribe()
+	defer L.UnSubscribe(sub)
 	for elm := range sub {
 		if logger == nil {
 			continue
 		}
-		log := elm.(*log.Event)
+		log := elm.(*L.Event)
+		if log.LogLevel < L.Level() {
+			continue
+		}
 		logger.Log(log.Type(), log.Payload)
 	}
 }
