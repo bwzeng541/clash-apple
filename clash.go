@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
 	L "github.com/Dreamacro/clash/log"
@@ -17,6 +18,7 @@ var (
 	stack           core.LWIPStack
 	trafficReceiver TrafficReceiver
 	logger          RealTimeLogger
+	primaryConfig   *config.Config
 )
 
 type PacketFlow interface {
@@ -43,7 +45,8 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	if err != nil {
 		return err
 	}
-	executor.ApplyConfig(cfg, true)
+	primaryConfig = cfg
+	executor.ApplyConfig(primaryConfig, true)
 	stack = core.NewLWIPStack()
 	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
 	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
@@ -66,7 +69,8 @@ func SetConfig(uuid string) error {
 	}
 	constant.SetConfig(path)
 	CloseAllConnections()
-	cfg.General = executor.GetGeneral()
+	cfg.General = primaryConfig.General
+	cfg.DNS = primaryConfig.DNS
 	executor.ApplyConfig(cfg, false)
 	return nil
 }
