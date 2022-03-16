@@ -35,4 +35,4 @@ require (
 	gvisor.dev/gvisor v0.0.0-20211214225704-fb4fed4724e4 // indirect
 )
 
-replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.7.2-0.20220316032100-2ac942c2f3f8
+replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.7.2-0.20220316013430-93cbf5cda08d
