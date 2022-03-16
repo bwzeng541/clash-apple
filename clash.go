@@ -10,20 +10,13 @@ import (
 	L "github.com/Dreamacro/clash/log"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
-	"github.com/eycorsican/go-tun2socks/core"
-	"github.com/eycorsican/go-tun2socks/proxy/socks"
 )
 
 var (
-	stack           core.LWIPStack
 	trafficReceiver TrafficReceiver
 	logger          RealTimeLogger
 	primaryConfig   *config.Config
 )
-
-type PacketFlow interface {
-	WritePacket(packet []byte)
-}
 
 type TrafficReceiver interface {
 	ReceiveTraffic(up int64, down int64)
@@ -33,11 +26,7 @@ type RealTimeLogger interface {
 	Log(level string, payload string)
 }
 
-func ReadPacket(data []byte) {
-	stack.Write(data)
-}
-
-func Setup(flow PacketFlow, homeDir string, config string) error {
+func Setup(homeDir string, config string) error {
 	go fetchLogs()
 	constant.SetHomeDir(homeDir)
 	constant.SetConfig("")
@@ -47,19 +36,12 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	primaryConfig = cfg
 	executor.ApplyConfig(primaryConfig, true)
-	stack = core.NewLWIPStack()
-	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
-	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
-	core.RegisterOutputFn(func(data []byte) (int, error) {
-		flow.WritePacket(data)
-		return len(data), nil
-	})
 	go fetchTraffic()
 	return nil
 }
 
 func SetConfig(uuid string) error {
-	if stack == nil {
+	if primaryConfig == nil {
 		return nil
 	}
 	path := filepath.Join(constant.Path.HomeDir(), uuid, "config.yaml")
@@ -76,7 +58,7 @@ func SetConfig(uuid string) error {
 }
 
 func SetTunnelMode(mode string) {
-	if stack == nil {
+	if primaryConfig == nil {
 		return
 	}
 	CloseAllConnections()
@@ -108,7 +90,7 @@ func fetchTraffic() {
 }
 
 func SetLogLevel(level string) {
-	if stack == nil {
+	if primaryConfig == nil {
 		return
 	}
 	L.SetLevel(L.LogLevelMapping[level])

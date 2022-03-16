@@ -2,10 +2,7 @@ module ClashKit
 
 go 1.17
 
-require (
-	github.com/Dreamacro/clash v1.9.0
-	github.com/eycorsican/go-tun2socks v1.16.11
-)
+require github.com/Dreamacro/clash v1.9.0
 
 require (
 	github.com/Dreamacro/go-shadowsocks2 v0.1.7 // indirect
@@ -38,4 +35,4 @@ require (
 	gvisor.dev/gvisor v0.0.0-20211214225704-fb4fed4724e4 // indirect
 )
 
-replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.7.2-0.20220315100041-c09055c1a7b3
+replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.7.2-0.20220316013430-93cbf5cda08d
