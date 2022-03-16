@@ -49,8 +49,8 @@ github.com/Azure/go-autorest/logger v0.1.0/go.mod h1:oExouG+K6PryycPJfVSxi/koC6L
 github.com/Azure/go-autorest/tracing v0.5.0/go.mod h1:r/s2XiOKccPW3HrqB+W0TQzfbtp2fGCgRFtBroKn4Dk=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/Clash-for-Apple/clash v1.7.2-0.20220316062716-1970368c1b1d h1:zlcrD6mJYF6q479kpPxoWrpwMLGbr9VtWIriDoqLJGA=
-github.com/Clash-for-Apple/clash v1.7.2-0.20220316062716-1970368c1b1d/go.mod h1:x/xphJMusdnx5cZ6bGDfHO3EXXlRaMptQPqUW1RD4Tg=
+github.com/Clash-for-Apple/clash v1.7.2-0.20220316013430-93cbf5cda08d h1:HJBodAewNfc3dBefCwTO1tqvaCf1LegPG2rYzbDVIEw=
+github.com/Clash-for-Apple/clash v1.7.2-0.20220316013430-93cbf5cda08d/go.mod h1:x/xphJMusdnx5cZ6bGDfHO3EXXlRaMptQPqUW1RD4Tg=
 github.com/Dreamacro/go-shadowsocks2 v0.1.7 h1:8CtbE1HoPPMfrQZGXmlluq6dO2lL31W6WRRE8fabc4Q=
 github.com/Dreamacro/go-shadowsocks2 v0.1.7/go.mod h1:8p5G4cAj5ZlXwUR+Ww63gfSikr8kvw8uw3TDwLAJpUc=
 github.com/Microsoft/go-winio v0.4.16-0.20201130162521-d1ffc52c7331/go.mod h1:XB6nPKklQyQ7GC9LdcBEcBl8PF76WugXOPRXwdLnMv0=
