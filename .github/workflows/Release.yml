@@ -17,7 +17,7 @@ jobs:
       
       - name: Set up gomobile
         run: |
-          go get golang.org/x/mobile/cmd/gomobile
+          go install golang.org/x/mobile/cmd/gomobile@latest
           gomobile init
         
       - name: Build ClashKit.xcframework
