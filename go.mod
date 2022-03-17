@@ -31,4 +31,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.9.1-0.20220316072550-b3987909f017
+replace github.com/Dreamacro/clash v1.9.0 => github.com/Clash-for-Apple/clash v1.9.1-0.20220317051316-1e439fbfa42a
