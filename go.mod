@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/Dreamacro/clash v1.9.0
-	github.com/eycorsican/go-tun2socks v1.16.11
 )
 
 require (
