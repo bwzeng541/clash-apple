@@ -9,6 +9,7 @@ import (
 	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
+	"github.com/Dreamacro/clash/log"
 	L "github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
@@ -83,16 +84,21 @@ func PatchSelectGroup(groupName string, proxyName string) {
 	if stack == nil {
 		return
 	}
+	log.Infoln("----> PatchSelectGroup, %s -- %s", groupName, proxyName)
 	proxies := tunnel.Proxies()
+	log.Infoln("----> Get proxies")
 	proxy, ok := proxies[groupName].(*adapter.Proxy)
 	if !ok {
+		log.Errorln("----> Get proxy failed....")
 		return
 	}
 	selector, ok := proxy.ProxyAdapter.(*outboundgroup.Selector)
 	if !ok {
+		log.Errorln("----> Get selector failed....")
 		return
 	}
 	if err := selector.Set(proxyName); err != nil {
+		log.Errorln("----> Set selector failed....")
 		return
 	}
 }
