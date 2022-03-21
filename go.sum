@@ -1,6 +1,6 @@
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/Clash-for-Apple/clash v1.9.1-0.20220317051316-1e439fbfa42a h1:oJ+6d7DOjyV/5GduoW/Sf3RRm1hkJI6cKLi0YafVNoU=
-github.com/Clash-for-Apple/clash v1.9.1-0.20220317051316-1e439fbfa42a/go.mod h1:Qre43BqAGIKpvRMvLB0cflDohlH2FmN/RrQZOlhi1jY=
+github.com/Clash-for-Apple/clash v1.10.1-0.20220321012136-938de2c3692c h1:6mvCzHCvoA3R772CyRHF2GHk+5Ng1tik8v9BNdAJcmM=
+github.com/Clash-for-Apple/clash v1.10.1-0.20220321012136-938de2c3692c/go.mod h1:Qre43BqAGIKpvRMvLB0cflDohlH2FmN/RrQZOlhi1jY=
 github.com/Dreamacro/go-shadowsocks2 v0.1.7 h1:8CtbE1HoPPMfrQZGXmlluq6dO2lL31W6WRRE8fabc4Q=
 github.com/Dreamacro/go-shadowsocks2 v0.1.7/go.mod h1:8p5G4cAj5ZlXwUR+Ww63gfSikr8kvw8uw3TDwLAJpUc=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
