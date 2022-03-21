@@ -4,10 +4,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Dreamacro/clash/adapter"
+	"github.com/Dreamacro/clash/adapter/outboundgroup"
 	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
 	L "github.com/Dreamacro/clash/log"
+	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
 	"github.com/eycorsican/go-tun2socks/core"
@@ -71,8 +74,27 @@ func SetConfig(uuid string) error {
 	CloseAllConnections()
 	cfg.General = primaryConfig.General
 	cfg.DNS = primaryConfig.DNS
+	cfg.Profile.StoreSelected = false
 	executor.ApplyConfig(cfg, false)
 	return nil
+}
+
+func PatchSelectGroup(groupName string, proxyName string) {
+	if stack == nil {
+		return
+	}
+	proxies := tunnel.Proxies()
+	proxy, ok := proxies[groupName].(*adapter.Proxy)
+	if !ok {
+		return
+	}
+	selector, ok := proxy.ProxyAdapter.(*outboundgroup.Selector)
+	if !ok {
+		return
+	}
+	if err := selector.Set(proxyName); err != nil {
+		return
+	}
 }
 
 func SetTunnelMode(mode string) {
