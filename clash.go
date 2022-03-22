@@ -1,6 +1,7 @@
 package clash
 
 import (
+	"encoding/json"
 	"path/filepath"
 	"time"
 
@@ -18,10 +19,10 @@ import (
 )
 
 var (
-	stack           core.LWIPStack
-	trafficReceiver TrafficReceiver
-	logger          RealTimeLogger
-	primaryConfig   *config.Config
+	stack    core.LWIPStack
+	receiver TrafficReceiver
+	logger   RealTimeLogger
+	basic    *config.Config
 )
 
 type PacketFlow interface {
@@ -48,8 +49,8 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	if err != nil {
 		return err
 	}
-	primaryConfig = cfg
-	executor.ApplyConfig(primaryConfig, true)
+	basic = cfg
+	executor.ApplyConfig(basic, true)
 	stack = core.NewLWIPStack()
 	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
 	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
@@ -72,28 +73,37 @@ func SetConfig(uuid string) error {
 	}
 	constant.SetConfig(path)
 	CloseAllConnections()
-	cfg.General = primaryConfig.General
-	cfg.DNS = primaryConfig.DNS
+	cfg.General = basic.General
+	cfg.DNS = basic.DNS
 	cfg.Profile.StoreSelected = false
 	executor.ApplyConfig(cfg, false)
 	return nil
 }
 
-func PatchSelectGroup(groupName string, proxyName string) {
+func PatchSelectGroup(data []byte) {
 	if stack == nil {
 		return
 	}
+	mapping := make(map[string]string)
+	err := json.Unmarshal(data, &mapping)
+	if err != nil {
+		return
+	}
 	proxies := tunnel.Proxies()
-	proxy, ok := proxies[groupName].(*adapter.Proxy)
-	if !ok {
-		return
-	}
-	selector, ok := proxy.ProxyAdapter.(*outboundgroup.Selector)
-	if !ok {
-		return
-	}
-	if err := selector.Set(proxyName); err != nil {
-		return
+	for name, proxy := range proxies {
+		selected, exist := mapping[name]
+		if !exist {
+			continue
+		}
+		outbound, ok := proxy.(*adapter.Proxy)
+		if !ok {
+			continue
+		}
+		selector, ok := outbound.ProxyAdapter.(*outboundgroup.Selector)
+		if !ok {
+			continue
+		}
+		selector.Set(selected)
 	}
 }
 
@@ -113,7 +123,7 @@ func CloseAllConnections() {
 }
 
 func SetTrafficReceiver(receive TrafficReceiver) {
-	trafficReceiver = receive
+	receiver = receive
 }
 
 func fetchTraffic() {
@@ -121,11 +131,11 @@ func fetchTraffic() {
 	defer tick.Stop()
 	t := statistic.DefaultManager
 	for range tick.C {
-		if trafficReceiver == nil {
+		if receiver == nil {
 			continue
 		}
 		up, down := t.Now()
-		trafficReceiver.ReceiveTraffic(up, down)
+		receiver.ReceiveTraffic(up, down)
 	}
 }
 
