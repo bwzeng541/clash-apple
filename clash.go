@@ -74,7 +74,7 @@ func SetConfig(uuid string) error {
 	constant.SetConfig(path)
 	CloseAllConnections()
 	cfg.General = basic.General
-	cfg.DNS = basic.DNS
+	cfg.DNS.Enable = false
 	cfg.Profile.StoreSelected = false
 	executor.ApplyConfig(cfg, false)
 	return nil
