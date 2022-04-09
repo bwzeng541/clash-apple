@@ -14,9 +14,12 @@ import (
 	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
+	"github.com/eycorsican/go-tun2socks/core"
+	"github.com/eycorsican/go-tun2socks/proxy/socks"
 )
 
 var (
+	stack    core.LWIPStack
 	receiver TrafficReceiver
 	logger   RealTimeLogger
 	basic    *config.Config
@@ -35,7 +38,7 @@ type RealTimeLogger interface {
 }
 
 func ReadPacket(data []byte) {
-
+	stack.Write(data)
 }
 
 func Setup(flow PacketFlow, homeDir string, config string) error {
@@ -48,12 +51,19 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
+	stack = core.NewLWIPStack()
+	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
+	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
+	core.RegisterOutputFn(func(data []byte) (int, error) {
+		flow.WritePacket(data)
+		return len(data), nil
+	})
 	go fetchTraffic()
 	return nil
 }
 
 func SetConfig(uuid string) error {
-	if basic == nil {
+	if stack == nil {
 		return nil
 	}
 	path := filepath.Join(constant.Path.HomeDir(), uuid, "config.yaml")
@@ -71,7 +81,7 @@ func SetConfig(uuid string) error {
 }
 
 func PatchSelectGroup(data []byte) {
-	if basic == nil {
+	if stack == nil {
 		return
 	}
 	mapping := make(map[string]string)
@@ -98,7 +108,7 @@ func PatchSelectGroup(data []byte) {
 }
 
 func SetTunnelMode(mode string) {
-	if basic == nil {
+	if stack == nil {
 		return
 	}
 	CloseAllConnections()
@@ -130,7 +140,7 @@ func fetchTraffic() {
 }
 
 func SetLogLevel(level string) {
-	if basic == nil {
+	if stack == nil {
 		return
 	}
 	L.SetLevel(L.LogLevelMapping[level])
