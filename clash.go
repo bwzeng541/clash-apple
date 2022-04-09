@@ -54,8 +54,11 @@ func Setup(name string, homeDir string, config string) error {
 	key.Device = name
 	key.Proxy = "socks5://127.0.0.1:8080"
 	key.MTU = 1500
-	engine.Insert(key)
-	engine.Start()
+	key.LogLevel = "debug"
+	go func() {
+		engine.Insert(key)
+		engine.Start()
+	}()
 	go fetchTraffic()
 	return nil
 }
