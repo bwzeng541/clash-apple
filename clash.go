@@ -53,11 +53,9 @@ func Setup(name string, homeDir string, config string) error {
 
 	key.Device = name
 	key.Proxy = "socks5://127.0.0.1:8080"
-	key.Interface = "en0"
 	key.MTU = 1500
 	engine.Insert(key)
 	engine.Start()
-
 	go fetchTraffic()
 	return nil
 }
@@ -74,7 +72,6 @@ func SetConfig(uuid string) error {
 	constant.SetConfig(path)
 	CloseAllConnections()
 	cfg.General = basic.General
-	cfg.DNS.Enable = false
 	cfg.Profile.StoreSelected = false
 	executor.ApplyConfig(cfg, false)
 	return nil
