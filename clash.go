@@ -14,9 +14,11 @@ import (
 	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
+	"github.com/xjasonlyu/tun2socks/v2/engine"
 )
 
 var (
+	key      = new(engine.Key)
 	receiver TrafficReceiver
 	logger   RealTimeLogger
 	basic    *config.Config
@@ -38,7 +40,7 @@ func ReadPacket(data []byte) {
 
 }
 
-func Setup(flow PacketFlow, homeDir string, config string) error {
+func Setup(name string, homeDir string, config string) error {
 	go fetchLogs()
 	constant.SetHomeDir(homeDir)
 	constant.SetConfig("")
@@ -48,6 +50,14 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
+
+	key.Device = name
+	key.Proxy = "socks5://127.0.0.1:8080"
+	key.Interface = "en0"
+	key.MTU = 1500
+	engine.Insert(key)
+	engine.Start()
+
 	go fetchTraffic()
 	return nil
 }
