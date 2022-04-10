@@ -6,7 +6,6 @@ import (
 	"github.com/xjasonlyu/tun2socks/v2/component/dialer"
 	"github.com/xjasonlyu/tun2socks/v2/core"
 	"github.com/xjasonlyu/tun2socks/v2/core/device"
-	"github.com/xjasonlyu/tun2socks/v2/core/device/tun"
 	"github.com/xjasonlyu/tun2socks/v2/core/option"
 	"github.com/xjasonlyu/tun2socks/v2/engine/mirror"
 	"github.com/xjasonlyu/tun2socks/v2/proxy"
@@ -21,7 +20,7 @@ var (
 	_stack  *stack.Stack
 )
 
-func SetupTun2Socks(name string) error {
+func SetupTun2Socks(fd int32) error {
 
 	iface, err := net.InterfaceByName("en0")
 	if err != nil {
@@ -36,7 +35,7 @@ func SetupTun2Socks(name string) error {
 	}
 	proxy.SetDialer(_proxy)
 
-	_device, err = tun.Open(name, 1500)
+	_device, err = Open(fd)
 	if err != nil {
 		return err
 	}
