@@ -10,20 +10,21 @@ import (
 	"golang.zx2c4.com/wireguard/tun"
 )
 
-type TUN struct {
+type darwintun struct {
 	*iobased.Endpoint
 	nt     *tun.NativeTun
 	offset int
 }
 
-func Open(fd int32) (_ device.Device, err error) {
+func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error) {
+
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("open tun: %v", r)
 		}
 	}()
 
-	t := &TUN{offset: 5}
+	t := &darwintun{offset: 5}
 
 	dupTunFd, err := unix.Dup(int(fd))
 	if err != nil {
@@ -60,24 +61,24 @@ func Open(fd int32) (_ device.Device, err error) {
 	return t, nil
 }
 
-func (t *TUN) Read(packet []byte) (int, error) {
+func (t *darwintun) Read(packet []byte) (int, error) {
 	return t.nt.Read(packet, t.offset)
 }
 
-func (t *TUN) Write(packet []byte) (int, error) {
+func (t *darwintun) Write(packet []byte) (int, error) {
 	return t.nt.Write(packet, t.offset)
 }
 
-func (t *TUN) Name() string {
+func (t *darwintun) Name() string {
 	name, _ := t.nt.Name()
 	return name
 }
 
-func (t *TUN) Close() error {
+func (t *darwintun) Close() error {
 	defer t.Endpoint.Close()
 	return t.nt.Close()
 }
 
-func (t *TUN) Type() string {
+func (t *darwintun) Type() string {
 	return "tun"
 }

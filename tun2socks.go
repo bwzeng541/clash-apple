@@ -35,7 +35,7 @@ func SetupTun2Socks(fd int32) error {
 	}
 	proxy.SetDialer(_proxy)
 
-	_device, err = Open(fd)
+	_device, err := createDeviceWithTunnelFileDescriptor(fd)
 	if err != nil {
 		return err
 	}
@@ -51,11 +51,9 @@ func SetupTun2Socks(fd int32) error {
 		Options: opts,
 	})
 
-	log.Warnln(
-		"[STACK] %s://%s <-> %s://%s",
-		_device.Type(), _device.Name(),
-		_proxy.Proto(), _proxy.Addr(),
-	)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
