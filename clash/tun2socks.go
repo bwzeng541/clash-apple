@@ -20,7 +20,7 @@ var (
 	_stack  *stack.Stack
 )
 
-func SetupTun2Socks(fd int32) error {
+func SetupTun2Socks(fd int32, tcpModerateReceiveBuffer bool, tcpSendBufferSize int, tcpReceiveBufferSize int) error {
 
 	iface, err := net.InterfaceByName("en0")
 	if err != nil {
@@ -41,7 +41,15 @@ func SetupTun2Socks(fd int32) error {
 	}
 
 	var opts []option.Option
-
+	if tcpModerateReceiveBuffer {
+		opts = append(opts, option.WithTCPModerateReceiveBuffer(true))
+	}
+	if tcpSendBufferSize > 0 {
+		opts = append(opts, option.WithTCPSendBufferSize(int(tcpSendBufferSize)))
+	}
+	if tcpReceiveBufferSize > 0 {
+		opts = append(opts, option.WithTCPReceiveBufferSize(int(tcpReceiveBufferSize)))
+	}
 	_stack, err = core.CreateStack(&core.Config{
 		LinkEndpoint:     _device,
 		TransportHandler: &mirror.Tunnel{},
