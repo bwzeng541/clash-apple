@@ -1,9 +1,6 @@
 package clash
 
 import (
-	"net"
-
-	"github.com/xjasonlyu/tun2socks/v2/component/dialer"
 	"github.com/xjasonlyu/tun2socks/v2/core"
 	"github.com/xjasonlyu/tun2socks/v2/core/device"
 	"github.com/xjasonlyu/tun2socks/v2/core/option"
@@ -21,13 +18,6 @@ var (
 )
 
 func SetupTun2Socks(fd int32, tcpModerateReceiveBuffer bool, tcpSendBufferSize int, tcpReceiveBufferSize int) error {
-
-	iface, err := net.InterfaceByName("en0")
-	if err != nil {
-		return err
-	}
-	dialer.DefaultInterfaceName.Store(iface.Name)
-	dialer.DefaultInterfaceIndex.Store(int32(iface.Index))
 
 	_proxy, err := proxy.NewSocks5("127.0.0.1:8080", "", "")
 	if err != nil {
