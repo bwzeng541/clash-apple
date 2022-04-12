@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	name = "eno0"
+	name = "en0"
 	addr = "127.0.0.1:8080"
 )
 
