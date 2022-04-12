@@ -3,7 +3,6 @@ package clash
 import (
 	"github.com/xjasonlyu/tun2socks/v2/core"
 	"github.com/xjasonlyu/tun2socks/v2/core/device"
-	"github.com/xjasonlyu/tun2socks/v2/core/device/tun"
 	"github.com/xjasonlyu/tun2socks/v2/core/option"
 	"github.com/xjasonlyu/tun2socks/v2/engine/mirror"
 	"github.com/xjasonlyu/tun2socks/v2/proxy"
@@ -26,7 +25,7 @@ func SetupTun2Socks(fd int32, tcpModerateReceiveBuffer bool, tcpSendBufferSize i
 	}
 	proxy.SetDialer(_proxy)
 
-	_device, err := tun.Open(fd)
+	_device, err := createDeviceWithTunnelFileDescriptor(fd)
 	if err != nil {
 		return err
 	}
