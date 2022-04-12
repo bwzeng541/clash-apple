@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	offset = 4
+	offset = 5
 )
 
 type appleTun struct {
