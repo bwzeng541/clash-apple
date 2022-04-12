@@ -3,15 +3,22 @@ package clash
 import L "github.com/Dreamacro/clash/log"
 
 var (
-	logger RealTimeLogger
+	logger NativeLogger
 )
 
-type RealTimeLogger interface {
+type NativeLogger interface {
 	Log(level string, payload string)
 }
 
-func SetRealTimeLogger(l RealTimeLogger) {
+func SetNativeLogger(l NativeLogger) {
 	logger = l
+}
+
+func SetLogLevel(level string) {
+	if basic == nil {
+		return
+	}
+	L.SetLevel(L.LogLevelMapping[level])
 }
 
 func fetchLogs() {
@@ -27,11 +34,4 @@ func fetchLogs() {
 		}
 		logger.Log(log.Type(), log.Payload)
 	}
-}
-
-func SetLogLevel(level string) {
-	if basic == nil {
-		return
-	}
-	L.SetLevel(L.LogLevelMapping[level])
 }

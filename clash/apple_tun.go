@@ -10,7 +10,12 @@ import (
 	"golang.zx2c4.com/wireguard/tun"
 )
 
-type darwintun struct {
+const (
+	offset     = 4
+	defaultMTU = 1500
+)
+
+type appleTun struct {
 	*iobased.Endpoint
 	nt     *tun.NativeTun
 	offset int
@@ -24,7 +29,7 @@ func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error)
 		}
 	}()
 
-	t := &darwintun{offset: 5}
+	t := &appleTun{offset: offset}
 
 	dupTunFd, err := unix.Dup(int(fd))
 	if err != nil {
@@ -37,7 +42,7 @@ func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error)
 		return nil, err
 	}
 
-	nt, err := tun.CreateTUNFromFile(os.NewFile(uintptr(dupTunFd), "/dev/tun"), 0)
+	nt, err := tun.CreateTUNFromFile(os.NewFile(uintptr(dupTunFd), "/dev/tun"), defaultMTU)
 	if err != nil {
 		unix.Close(dupTunFd)
 		return nil, err
@@ -51,7 +56,7 @@ func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error)
 		return nil, fmt.Errorf("get mtu: %w", err)
 	}
 
-	ep, err := iobased.New(t, uint32(mtu), 5)
+	ep, err := iobased.New(t, uint32(mtu), offset)
 	if err != nil {
 		unix.Close(dupTunFd)
 		return nil, fmt.Errorf("create endpoint: %w", err)
@@ -61,24 +66,24 @@ func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error)
 	return t, nil
 }
 
-func (t *darwintun) Read(packet []byte) (int, error) {
+func (t *appleTun) Read(packet []byte) (int, error) {
 	return t.nt.Read(packet, t.offset)
 }
 
-func (t *darwintun) Write(packet []byte) (int, error) {
+func (t *appleTun) Write(packet []byte) (int, error) {
 	return t.nt.Write(packet, t.offset)
 }
 
-func (t *darwintun) Name() string {
+func (t *appleTun) Name() string {
 	name, _ := t.nt.Name()
 	return name
 }
 
-func (t *darwintun) Close() error {
+func (t *appleTun) Close() error {
 	defer t.Endpoint.Close()
 	return t.nt.Close()
 }
 
-func (t *darwintun) Type() string {
+func (t *appleTun) Type() string {
 	return "tun"
 }

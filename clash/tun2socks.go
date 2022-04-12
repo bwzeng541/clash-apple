@@ -1,8 +1,10 @@
 package clash
 
 import (
+	"net"
+
+	"github.com/xjasonlyu/tun2socks/v2/component/dialer"
 	"github.com/xjasonlyu/tun2socks/v2/core"
-	"github.com/xjasonlyu/tun2socks/v2/core/device"
 	"github.com/xjasonlyu/tun2socks/v2/core/option"
 	"github.com/xjasonlyu/tun2socks/v2/engine/mirror"
 	"github.com/xjasonlyu/tun2socks/v2/proxy"
@@ -12,14 +14,25 @@ import (
 	"github.com/Dreamacro/clash/log"
 )
 
-var (
-	_device device.Device
-	_stack  *stack.Stack
+const (
+	name = "eno0"
+	addr = "127.0.0.1:8080"
 )
 
-func SetupTun2Socks(fd int32, tcpModerateReceiveBuffer bool, tcpSendBufferSize int, tcpReceiveBufferSize int) error {
+var (
+	_stack *stack.Stack
+)
 
-	_proxy, err := proxy.NewSocks5("127.0.0.1:8080", "", "")
+func StartTun2Socks(fd int32, tcpModerateReceiveBuffer bool, tcpSendBufferSize int, tcpReceiveBufferSize int) error {
+
+	iface, err := net.InterfaceByName(name)
+	if err != nil {
+		return err
+	}
+	dialer.DefaultInterfaceName.Store(iface.Name)
+	dialer.DefaultInterfaceIndex.Store(int32(iface.Index))
+
+	_proxy, err := proxy.NewSocks5(addr, "", "")
 	if err != nil {
 		return err
 	}
