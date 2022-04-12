@@ -11,8 +11,7 @@ import (
 )
 
 const (
-	offset     = 4
-	defaultMTU = 1500
+	offset = 4
 )
 
 type appleTun struct {
@@ -42,7 +41,7 @@ func createDeviceWithTunnelFileDescriptor(fd int32) (_ device.Device, err error)
 		return nil, err
 	}
 
-	nt, err := tun.CreateTUNFromFile(os.NewFile(uintptr(dupTunFd), "/dev/tun"), defaultMTU)
+	nt, err := tun.CreateTUNFromFile(os.NewFile(uintptr(dupTunFd), "/dev/tun"), 0)
 	if err != nil {
 		unix.Close(dupTunFd)
 		return nil, err
