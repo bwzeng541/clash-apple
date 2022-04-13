@@ -5,16 +5,13 @@ go 1.18
 require github.com/Dreamacro/clash v1.9.0
 
 require (
-	github.com/google/btree v1.0.1 // indirect
-	github.com/google/uuid v1.3.0 // indirect
-	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect
-	golang.zx2c4.com/wintun v0.0.0-20211104114900-415007cec224 // indirect
-	golang.zx2c4.com/wireguard v0.0.0-20220318042302-193cf8d6a5d6 // indirect
-	gvisor.dev/gvisor v0.0.0-20220405222207-795f4f0139bb // indirect
+	golang.org/x/mobile v0.0.0-20220407111146-e579adbbc4a2 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
 require (
 	github.com/Dreamacro/go-shadowsocks2 v0.1.7 // indirect
+	github.com/Kr328/tun2socket v0.0.0-20220317122653-4050a94cb4dd
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/insomniacslk/dhcp v0.0.0-20220119180841-3c283ff8b7dd // indirect
@@ -23,15 +20,13 @@ require (
 	github.com/oschwald/maxminddb-golang v1.8.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/u-root/uio v0.0.0-20210528114334-82958018845c // indirect
-	github.com/xjasonlyu/tun2socks/v2 v2.4.1
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
-	golang.org/x/mobile v0.0.0-20220307220422-55113b94f09c // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220405210540-1e041c57c461 // indirect
+	golang.org/x/sys v0.0.0-20220405210540-1e041c57c461
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.9 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
