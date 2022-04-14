@@ -1,24 +1,26 @@
 package clash
 
 import (
-	"io"
+	"time"
 
-	"ClashKit/clash/tun"
+	"github.com/eycorsican/go-tun2socks/core"
+	"github.com/eycorsican/go-tun2socks/proxy/socks"
 )
 
-var (
-	closer io.Closer
-)
-
-func StartTun2Socket(fd int, gateway, portal string) error {
-	stack, err := tun.StartTun2Socket(fd, gateway, portal)
-	if err != nil {
-		return err
-	}
-	closer = stack
-	return nil
+type PacketFlow interface {
+	WritePacket(data []byte)
 }
 
-func StopTun2Socket() error {
-	return closer.Close()
+var (
+	stack core.LWIPStack
+)
+
+func startTun2Socks(flow PacketFlow, port uint16) {
+	stack = core.NewLWIPStack()
+	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", port))
+	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", port, 30*time.Second))
+	core.RegisterOutputFn(func(data []byte) (int, error) {
+		flow.WritePacket(data)
+		return len(data), nil
+	})
 }

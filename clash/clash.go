@@ -18,7 +18,7 @@ var (
 	basic *config.Config
 )
 
-func Setup(homeDir string, config string) error {
+func Setup(flow PacketFlow, homeDir string, config string) error {
 	go fetchLogs()
 	constant.SetHomeDir(homeDir)
 	constant.SetConfig("")
@@ -28,6 +28,7 @@ func Setup(homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
+	startTun2Socks(flow, uint16(cfg.General.Port))
 	go fetchTraffic()
 	return nil
 }
