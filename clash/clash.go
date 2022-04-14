@@ -28,7 +28,7 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
-	startTun2Socks(flow, uint16(cfg.General.Port))
+	startTun2Socks(flow, uint16(cfg.General.MixedPort))
 	go fetchTraffic()
 	return nil
 }
