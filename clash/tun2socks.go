@@ -15,6 +15,10 @@ var (
 	stack core.LWIPStack
 )
 
+func ReadPacket(data []byte) {
+	stack.Write(data)
+}
+
 func startTun2Socks(flow PacketFlow, port uint16) {
 	stack = core.NewLWIPStack()
 	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", port))
