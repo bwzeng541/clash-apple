@@ -40,13 +40,15 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
-	stack = core.NewLWIPStack()
-	core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
-	core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
-	core.RegisterOutputFn(func(data []byte) (int, error) {
-		flow.WritePacket(data)
-		return len(data), nil
-	})
+	if flow != nil {
+		stack = core.NewLWIPStack()
+		core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
+		core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
+		core.RegisterOutputFn(func(data []byte) (int, error) {
+			flow.WritePacket(data)
+			return len(data), nil
+		})
+	}
 	go fetchTraffic()
 	return nil
 }
