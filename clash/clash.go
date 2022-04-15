@@ -3,7 +3,6 @@ package clash
 import (
 	"encoding/json"
 	"path/filepath"
-	"time"
 
 	"github.com/Dreamacro/clash/adapter"
 	"github.com/Dreamacro/clash/adapter/outboundgroup"
@@ -13,24 +12,13 @@ import (
 	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
-	"github.com/eycorsican/go-tun2socks/core"
-	"github.com/eycorsican/go-tun2socks/proxy/socks"
 )
 
 var (
 	basic *config.Config
-	stack core.LWIPStack
 )
 
-type PacketFlow interface {
-	WritePacket(data []byte)
-}
-
-func ReadPacket(data []byte) {
-	stack.Write(data)
-}
-
-func Setup(flow PacketFlow, homeDir string, config string) error {
+func Setup(homeDir string, config string) error {
 	go fetchLogs()
 	constant.SetHomeDir(homeDir)
 	constant.SetConfig("")
@@ -40,15 +28,6 @@ func Setup(flow PacketFlow, homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
-	if flow != nil {
-		stack = core.NewLWIPStack()
-		core.RegisterTCPConnHandler(socks.NewTCPHandler("127.0.0.1", uint16(cfg.General.MixedPort)))
-		core.RegisterUDPConnHandler(socks.NewUDPHandler("127.0.0.1", uint16(cfg.General.MixedPort), 30*time.Second))
-		core.RegisterOutputFn(func(data []byte) (int, error) {
-			flow.WritePacket(data)
-			return len(data), nil
-		})
-	}
 	go fetchTraffic()
 	return nil
 }

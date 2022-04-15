@@ -2,10 +2,7 @@ module ClashKit
 
 go 1.18
 
-require (
-	github.com/Dreamacro/clash v1.9.0
-	github.com/eycorsican/go-tun2socks v1.16.11
-)
+require github.com/Dreamacro/clash v1.9.0
 
 require (
 	github.com/Dreamacro/go-shadowsocks2 v0.1.7 // indirect
@@ -20,7 +17,7 @@ require (
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
-	golang.org/x/mobile v0.0.0-20220407111146-e579adbbc4a2 // indirect
+	golang.org/x/mobile v0.0.0-20220414153400-ce6a79cf6a13 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
