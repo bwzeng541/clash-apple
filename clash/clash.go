@@ -93,13 +93,13 @@ func CloseAllConnections() {
 	}
 }
 
-func URLTest(name string, url string, timeout int) uint16 {
+func URLTest(name string, url string, timeout int64) int64 {
 
 	proxies := tunnel.Proxies()
 	proxy, exist := proxies[name]
 
 	if !exist {
-		return 0
+		return -1
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*time.Duration(timeout))
@@ -107,12 +107,12 @@ func URLTest(name string, url string, timeout int) uint16 {
 
 	delay, err := proxy.URLTest(ctx, url)
 	if ctx.Err() != nil {
-		return 0
+		return -2
 	}
 
 	if err != nil || delay == 0 {
-		return 0
+		return -3
 	}
 
-	return delay
+	return int64(delay)
 }
