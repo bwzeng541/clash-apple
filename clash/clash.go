@@ -1,10 +1,8 @@
 package clash
 
 import (
-	"context"
 	"encoding/json"
 	"path/filepath"
-	"time"
 
 	"github.com/Dreamacro/clash/adapter"
 	"github.com/Dreamacro/clash/adapter/outboundgroup"
@@ -19,6 +17,10 @@ import (
 var (
 	basic *config.Config
 )
+
+func IsSetupCompleted() bool {
+	return basic != nil
+}
 
 func Setup(homeDir string, config string) error {
 	go fetchLogs()
@@ -91,28 +93,4 @@ func CloseAllConnections() {
 	for _, c := range snapshot.Connections {
 		c.Close()
 	}
-}
-
-func URLTest(name string, url string, timeout int64) int64 {
-
-	proxies := tunnel.Proxies()
-	proxy, exist := proxies[name]
-
-	if !exist {
-		return -1
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*time.Duration(timeout))
-	defer cancel()
-
-	delay, err := proxy.URLTest(ctx, url)
-	if ctx.Err() != nil {
-		return -2
-	}
-
-	if err != nil || delay == 0 {
-		return -3
-	}
-
-	return int64(delay)
 }
