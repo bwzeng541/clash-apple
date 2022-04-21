@@ -1,8 +1,10 @@
 package clash
 
 import (
+	"context"
 	"encoding/json"
 	"path/filepath"
+	"time"
 
 	"github.com/Dreamacro/clash/adapter"
 	"github.com/Dreamacro/clash/adapter/outboundgroup"
@@ -89,4 +91,28 @@ func CloseAllConnections() {
 	for _, c := range snapshot.Connections {
 		c.Close()
 	}
+}
+
+func URLTest(name string, url string, timeout int) uint16 {
+
+	proxies := tunnel.Proxies()
+	proxy, exist := proxies[name]
+
+	if !exist {
+		return 0
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*time.Duration(timeout))
+	defer cancel()
+
+	delay, err := proxy.URLTest(ctx, url)
+	if ctx.Err() != nil {
+		return 0
+	}
+
+	if err != nil || delay == 0 {
+		return 0
+	}
+
+	return delay
 }
