@@ -18,10 +18,6 @@ var (
 	basic *config.Config
 )
 
-func IsSetupCompleted() bool {
-	return basic != nil
-}
-
 func Setup(homeDir string, config string) error {
 	go fetchLogs()
 	constant.SetHomeDir(homeDir)

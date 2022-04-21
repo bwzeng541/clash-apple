@@ -2,54 +2,73 @@ package clash
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/Dreamacro/clash/tunnel"
 )
 
-type URLTestRequest struct {
+type _URLTestRequest struct {
 	Name    string `json:"name"`
 	URL     string `json:"url"`
 	Timeout int64  `json:"timeout"`
 }
 
-type URLTestResponse struct {
+type _URLTestResponse struct {
 	Name  string `json:"name"`
 	Delay int64  `json:"delay"`
 }
 
-func URLTest(request URLTestRequest) URLTestResponse {
+func ABCURLTest() ([]byte, error) {
+	return nil, nil
+}
 
-	proxies := tunnel.Proxies()
-	proxy, exist := proxies[request.Name]
+func URLTest(request []byte) []byte {
+	var (
+		req  *_URLTestRequest
+		resp _URLTestResponse
+	)
+	for {
+		req = new(_URLTestRequest)
+		json.Unmarshal(request, req)
 
-	if !exist {
-		return URLTestResponse{
-			Name:  request.Name,
-			Delay: -1,
+		proxies := tunnel.Proxies()
+		proxy, exist := proxies[req.Name]
+
+		if !exist {
+			resp = _URLTestResponse{
+				Name:  req.Name,
+				Delay: -1,
+			}
+			break
 		}
-	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*time.Duration(request.Timeout))
-	defer cancel()
+		ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*time.Duration(req.Timeout))
+		defer cancel()
 
-	delay, err := proxy.URLTest(ctx, request.URL)
-	if ctx.Err() != nil {
-		return URLTestResponse{
-			Name:  request.Name,
-			Delay: -2,
+		delay, err := proxy.URLTest(ctx, req.URL)
+		if ctx.Err() != nil {
+			resp = _URLTestResponse{
+				Name:  req.Name,
+				Delay: -2,
+			}
+			break
 		}
-	}
 
-	if err != nil || delay == 0 {
-		return URLTestResponse{
-			Name:  request.Name,
-			Delay: -3,
+		if err != nil || delay == 0 {
+			resp = _URLTestResponse{
+				Name:  req.Name,
+				Delay: -3,
+			}
+			break
 		}
-	}
 
-	return URLTestResponse{
-		Name:  request.Name,
-		Delay: int64(delay),
+		resp = _URLTestResponse{
+			Name:  req.Name,
+			Delay: int64(delay),
+		}
+		break
 	}
+	data, _ := json.Marshal(resp)
+	return data
 }
