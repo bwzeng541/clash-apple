@@ -5,10 +5,12 @@ import (
 	"time"
 
 	"github.com/Dreamacro/clash/common/batch"
+	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/tunnel"
 )
 
 var (
+	_ticker   *time.Ticker
 	_callback URLTestCallback
 )
 
@@ -18,10 +20,17 @@ type URLTestCallback interface {
 
 func URLTests(callback URLTestCallback, duration int64) {
 	_callback = callback
-	ticker := time.NewTicker(time.Duration(duration) * time.Second)
-	defer ticker.Stop()
-	for range ticker.C {
+	if _ticker != nil {
+		_ticker.Stop()
+	}
+	_URLTests()
+	_ticker = time.NewTicker(time.Duration(duration) * time.Second)
+	for range _ticker.C {
 		_URLTests()
+		log.Warnln("-----------> providers : %d", len(tunnel.Providers()))
+		for _, provider := range tunnel.Providers() {
+			provider.HealthCheck()
+		}
 	}
 }
 
