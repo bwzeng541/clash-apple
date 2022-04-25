@@ -9,7 +9,6 @@ import (
 	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/tunnel"
 	T "github.com/Dreamacro/clash/tunnel"
 	"github.com/Dreamacro/clash/tunnel/statistic"
@@ -61,26 +60,19 @@ func PatchSelectGroup(data []byte) {
 	}
 	proxies := tunnel.Proxies()
 	for name, proxy := range proxies {
-		log.Infoln("patch proxy name %s", name)
 		selected, exist := mapping[name]
 		if !exist {
-			log.Warnln("patch proxy name not found: %s", name)
 			continue
 		}
 		outbound, ok := proxy.(*adapter.Proxy)
 		if !ok {
-			log.Warnln("patch proxy name convert failed: %s", name)
 			continue
 		}
 		selector, ok := outbound.ProxyAdapter.(*outboundgroup.Selector)
 		if !ok {
-			log.Warnln("patch proxy name no selector: %s", name)
 			continue
 		}
-		err := selector.Set(selected)
-		if err != nil {
-			log.Warnln("patch proxy failed: %s", err.Error())
-		}
+		selector.Set(selected)
 	}
 }
 
