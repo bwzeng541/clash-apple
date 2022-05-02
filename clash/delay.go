@@ -13,6 +13,12 @@ func HealthCheck() {
 	}
 }
 
+func Providers() []byte {
+	providers := tunnel.Providers()
+	data, _ := json.Marshal(providers)
+	return data
+}
+
 func Provider(name string) []byte {
 	providers := tunnel.Providers()
 	provider, exist := providers[name]
