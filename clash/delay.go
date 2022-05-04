@@ -7,19 +7,37 @@ import (
 )
 
 func HealthCheck() {
+	if basic == nil {
+		return
+	}
 	providers := tunnel.Providers()
 	for _, provider := range providers {
 		provider.HealthCheck()
 	}
 }
 
+func Proxies() []byte {
+	if basic == nil {
+		return nil
+	}
+	proxies := tunnel.Proxies()
+	data, _ := json.Marshal(proxies)
+	return data
+}
+
 func Providers() []byte {
+	if basic == nil {
+		return nil
+	}
 	providers := tunnel.Providers()
 	data, _ := json.Marshal(providers)
 	return data
 }
 
 func Provider(name string) []byte {
+	if basic == nil {
+		return nil
+	}
 	providers := tunnel.Providers()
 	provider, exist := providers[name]
 	if !exist {
