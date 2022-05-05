@@ -46,3 +46,16 @@ func Provider(name string) []byte {
 	data, _ := json.Marshal(provider)
 	return data
 }
+
+func MergedProxyData() []byte {
+	if basic == nil {
+		return nil
+	}
+	proxies := tunnel.Proxies()
+	providers := tunnel.Providers()
+	mapping := make(map[string]interface{})
+	mapping["proxies"] = proxies
+	mapping["providers"] = providers
+	data, _ := json.Marshal(mapping)
+	return data
+}
