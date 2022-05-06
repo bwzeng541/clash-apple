@@ -64,6 +64,7 @@ func PatchData() []byte {
 			return selector.Now()
 		}(proxy)
 		temp["histories"] = proxy.DelayHistory()
+		mapping[proxy.Name()] = temp
 	}
 	data, _ := json.Marshal(mapping)
 	return data
