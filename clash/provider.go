@@ -3,9 +3,6 @@ package clash
 import (
 	"encoding/json"
 
-	"github.com/Dreamacro/clash/adapter"
-	"github.com/Dreamacro/clash/adapter/outboundgroup"
-	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/tunnel"
 )
 
@@ -49,23 +46,6 @@ func PatchData() []byte {
 		return nil
 	}
 	proxies := tunnel.Proxies()
-	mapping := make(map[string]interface{})
-	for _, proxy := range proxies {
-		temp := make(map[string]interface{})
-		temp["current"] = func(proxy constant.Proxy) string {
-			outbound, ok := proxy.(*adapter.Proxy)
-			if !ok {
-				return ""
-			}
-			selector, ok := outbound.ProxyAdapter.(*outboundgroup.Selector)
-			if !ok {
-				return ""
-			}
-			return selector.Now()
-		}(proxy)
-		temp["histories"] = proxy.DelayHistory()
-		mapping[proxy.Name()] = temp
-	}
-	data, _ := json.Marshal(mapping)
+	data, _ := json.Marshal(proxies)
 	return data
 }
