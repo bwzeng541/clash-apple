@@ -10,35 +10,13 @@ import (
 	"github.com/Dreamacro/clash/tunnel"
 )
 
-func HealthChecks() {
-	if basic == nil {
-		return
-	}
-	providers := tunnel.Providers()
-	for _, provider := range providers {
-		provider.HealthCheck()
-	}
-}
-
-func HealthCheck(name string) {
-	if basic == nil {
-		return
-	}
-	providers := tunnel.Providers()
-	provider, exist := providers[name]
-	if !exist {
-		return
-	}
-	provider.HealthCheck()
-}
-
 func MergedProxyData() []byte {
 	if basic == nil {
 		return nil
 	}
 	proxies := tunnel.Proxies()
 	providers := tunnel.Providers()
-	mapping := make(map[string]interface{})
+	mapping := make(map[string]any)
 	mapping["proxies"] = proxies
 	mapping["providers"] = providers
 	data, _ := json.Marshal(mapping)
@@ -54,32 +32,21 @@ func PatchData() []byte {
 	return data
 }
 
-type _URLTestRequest struct {
-	Names   []string `json:"names"`
-	URL     string   `json:"url"`
-	Timeout int      `json:"timeout"`
-}
-
-func URLTest(request []byte) {
+func HealthCheck(name string, url string, timeout int) {
 	if basic == nil {
 		return
 	}
-	req := &_URLTestRequest{}
-	err := json.Unmarshal(request, req)
-	if err != nil {
+	providers := tunnel.Providers()
+	provider, exist := providers[name]
+	if !exist {
 		return
 	}
-	if len(req.Names) == 0 {
-		return
-	}
-	ps := tunnel.Proxies()
+	ps := provider.Proxies()
 	proxies := make(map[string]constant.Proxy)
-	for _, name := range req.Names {
-		proxy, exist := ps[name]
-		if exist {
-			continue
+	for _, proxy := range ps {
+		if isURLTestAdapterType(proxy.Type()) {
+			proxies[proxy.Name()] = proxy
 		}
-		proxies[name] = proxy
 	}
 	if len(proxies) == 0 {
 		return
@@ -88,11 +55,49 @@ func URLTest(request []byte) {
 	for _, proxy := range proxies {
 		p := proxy
 		b.Go(p.Name(), func() (any, error) {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(req.Timeout))
+			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 			defer cancel()
-			p.URLTest(ctx, req.URL)
+			p.URLTest(ctx, url)
 			return nil, nil
 		})
 	}
 	b.Wait()
+}
+
+func isURLTestAdapterType(at constant.AdapterType) bool {
+	switch at {
+	case constant.Direct:
+		return false
+	case constant.Reject:
+		return false
+
+	case constant.Shadowsocks:
+		return true
+	case constant.ShadowsocksR:
+		return true
+	case constant.Snell:
+		return true
+	case constant.Socks5:
+		return true
+	case constant.Http:
+		return true
+	case constant.Vmess:
+		return true
+	case constant.Trojan:
+		return true
+
+	case constant.Relay:
+		return false
+	case constant.Selector:
+		return false
+	case constant.Fallback:
+		return false
+	case constant.URLTest:
+		return false
+	case constant.LoadBalance:
+		return false
+
+	default:
+		return false
+	}
 }
