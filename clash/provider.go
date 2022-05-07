@@ -64,8 +64,8 @@ func URLTest(request []byte) {
 	if basic == nil {
 		return
 	}
-	req := _URLTestRequest{}
-	err := json.Unmarshal(request, &req)
+	req := &_URLTestRequest{}
+	err := json.Unmarshal(request, req)
 	if err != nil {
 		return
 	}
