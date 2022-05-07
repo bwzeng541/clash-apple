@@ -54,16 +54,27 @@ func PatchData() []byte {
 	return data
 }
 
-func URLTest(names []string, url string, timeout int) {
+type _URLTestRequest struct {
+	Names   []string `json:"names"`
+	URL     string   `json:"url"`
+	Timeout int      `json:"timeout"`
+}
+
+func URLTest(request []byte) {
 	if basic == nil {
 		return
 	}
-	if len(names) == 0 {
+	req := _URLTestRequest{}
+	err := json.Unmarshal(request, &req)
+	if err != nil {
+		return
+	}
+	if len(req.Names) == 0 {
 		return
 	}
 	ps := tunnel.Proxies()
 	proxies := make(map[string]constant.Proxy)
-	for _, name := range names {
+	for _, name := range req.Names {
 		proxy, exist := ps[name]
 		if exist {
 			continue
@@ -77,9 +88,9 @@ func URLTest(names []string, url string, timeout int) {
 	for _, proxy := range proxies {
 		p := proxy
 		b.Go(p.Name(), func() (any, error) {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(timeout))
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(req.Timeout))
 			defer cancel()
-			p.URLTest(ctx, url)
+			p.URLTest(ctx, req.URL)
 			return nil, nil
 		})
 	}
