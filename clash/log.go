@@ -22,13 +22,24 @@ func SetLogLevel(level string) {
 }
 
 func fetchLogs() {
+
+	ch := make(chan L.Event, 1024)
+
 	sub := L.Subscribe()
 	defer L.UnSubscribe(sub)
-	for elm := range sub {
-		if logger == nil {
-			continue
+
+	go func() {
+		for elm := range sub {
+			log := elm.(L.Event)
+			select {
+			case ch <- log:
+			default:
+			}
 		}
-		log := elm.(*L.Event)
+		close(ch)
+	}()
+
+	for log := range ch {
 		if log.LogLevel < L.Level() {
 			continue
 		}
