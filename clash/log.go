@@ -43,6 +43,9 @@ func fetchLogs() {
 		if log.LogLevel < L.Level() {
 			continue
 		}
+		if logger == nil {
+			continue
+		}
 		logger.Log(log.Type(), log.Payload)
 	}
 }
