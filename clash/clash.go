@@ -20,6 +20,7 @@ var (
 
 func Setup(homeDir string, config string) error {
 	go fetchLogs()
+	go fetchTraffic()
 	constant.SetHomeDir(homeDir)
 	constant.SetConfig("")
 	cfg, err := executor.ParseWithBytes(([]byte)(config))
@@ -28,7 +29,6 @@ func Setup(homeDir string, config string) error {
 	}
 	basic = cfg
 	executor.ApplyConfig(basic, true)
-	go fetchTraffic()
 	return nil
 }
 
