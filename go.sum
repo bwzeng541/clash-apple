@@ -1,5 +1,5 @@
-github.com/AppleClash/clash v1.10.7-0.20220511014351-6a4b79c0a39e h1:16ipS8KG3GJwG05wzfzUwDyUBrfmT5KseQ/hg1TTOaI=
-github.com/AppleClash/clash v1.10.7-0.20220511014351-6a4b79c0a39e/go.mod h1:80VgOdG2DQlybJYNOhxsjhY9z2/vUcBIGO1vYae0sHQ=
+github.com/AppleClash/clash v1.10.7-0.20220601041558-9a2e9ceb7bf0 h1:LMQGAO0AOY/5Q5gi9GNdJazu3Fk1vvq5jtHdv4Kjxik=
+github.com/AppleClash/clash v1.10.7-0.20220601041558-9a2e9ceb7bf0/go.mod h1:mISCdMsI+BHiE29CA4bc0mTMy3oZrC7+s4LmORJspX8=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Dreamacro/go-shadowsocks2 v0.1.8 h1:Ixejp5JscEc866gAvm/l6TFd7BOBvDviKgwb1quWw3g=
 github.com/Dreamacro/go-shadowsocks2 v0.1.8/go.mod h1:51y4Q6tJoCE7e8TmYXcQRqfoxPfE9Cvn79V6pB6Df7Y=
@@ -67,8 +67,8 @@ golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56/go.mod h1:JhuoJpWY28nO4Vef9t
 golang.org/x/image v0.0.0-20190227222117-0694c2d4d067/go.mod h1:kZ7UVZpmo3dzQBMxlp+ypCbDeSB+sBbTgSJuh5dn5js=
 golang.org/x/image v0.0.0-20190802002840-cff245a6509b/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/mobile v0.0.0-20190312151609-d3739f865fa6/go.mod h1:z+o9i4GpDbdi3rU15maQ/Ox0txvL9dWGYEHz965HBQE=
-golang.org/x/mobile v0.0.0-20220504144722-50dca8fc073d h1:t1D1QwHyJFPzEHb1npu06EYJstXU9Pm517vGvJiACJU=
-golang.org/x/mobile v0.0.0-20220504144722-50dca8fc073d/go.mod h1:pe2sM7Uk+2Su1y7u/6Z8KJ24D7lepUjFZbhFOrmDfuQ=
+golang.org/x/mobile v0.0.0-20220518205345-8578da9835fd h1:x1GptNaTtxPAlTVIAJk61fuXg0y17h09DTxyb+VNC/k=
+golang.org/x/mobile v0.0.0-20220518205345-8578da9835fd/go.mod h1:pe2sM7Uk+2Su1y7u/6Z8KJ24D7lepUjFZbhFOrmDfuQ=
 golang.org/x/mod v0.1.0/go.mod h1:0QHyrYULN0/3qlju5TqG8bIK38QM8yzMo5ekMj3DlcY=
 golang.org/x/mod v0.4.2/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.5.1 h1:OJxoQ/rynoF0dcCdI7cLPktw/hR2cueqYfjm43oqK38=

@@ -17,7 +17,7 @@ require (
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20220507011949-2cf3adece122 // indirect
-	golang.org/x/mobile v0.0.0-20220504144722-50dca8fc073d // indirect
+	golang.org/x/mobile v0.0.0-20220518205345-8578da9835fd // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
@@ -28,4 +28,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/Dreamacro/clash v1.9.0 => github.com/AppleClash/clash v1.10.7-0.20220511014351-6a4b79c0a39e
+replace github.com/Dreamacro/clash v1.9.0 => github.com/AppleClash/clash v1.10.7-0.20220601041558-9a2e9ceb7bf0

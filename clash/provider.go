@@ -75,8 +75,6 @@ func isURLTestAdapterType(at constant.AdapterType) bool {
 		return true
 	case constant.ShadowsocksR:
 		return true
-	case constant.Snell:
-		return true
 	case constant.Socks5:
 		return true
 	case constant.Http:
